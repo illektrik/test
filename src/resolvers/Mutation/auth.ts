@@ -1,14 +1,18 @@
 import * as bcrypt from 'bcryptjs'
 import * as jwt from 'jsonwebtoken'
-import { Context } from '../../utils'
+import {Context, createToken, getUserId} from '../../utils'
 
 export const auth = {
+  async refreshToken(parent, {token}, ctx: Context) {
+    const userId = getUserId(token);
+    return createToken(userId);
+  },
   async signup(parent, args, ctx: Context) {
     const password = await bcrypt.hash(args.password, 10)
     const user = await ctx.prisma.createUser({ ...args, password })
 
     return {
-      token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
+      token: createToken(user.id),
       user,
     }
   },
@@ -36,7 +40,7 @@ export const auth = {
 
     return {
       payload: {
-        token: jwt.sign({ userId: user.id }, process.env.APP_SECRET),
+        token: createToken(user.id),
         user,
       }
     }
