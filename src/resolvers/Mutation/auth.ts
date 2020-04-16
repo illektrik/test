@@ -4,7 +4,7 @@ import {Context, createToken, getUserId} from '../../utils'
 
 export const auth = {
   async refreshToken(parent, {token}, ctx: Context) {
-    const userId = getUserId(token);
+    const userId = getUserId(ctx, token);
     return createToken(userId);
   },
   async signup(parent, args, ctx: Context) {

@@ -8,7 +8,10 @@ const MainScreen = ({navigation}) => {
 
   return (
     <View style={styles.center}>
-      <Text>MainScreen</Text>
+      <View style={styles.products}>
+        <Text>Products</Text>
+        <Button title="Create product" onPress={() => navigation.navigate('NewProduct')}/>
+      </View>
       <Button title="Go To Signup" onPress={goToAccount} />
     </View>
   )
@@ -17,6 +20,10 @@ const MainScreen = ({navigation}) => {
 const styles = StyleSheet.create({
   center: {
     flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  products: {
     justifyContent: 'center',
     alignItems: 'center'
   }
