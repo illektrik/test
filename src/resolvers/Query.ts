@@ -6,6 +6,7 @@ export const Query = {
   },
 
   drafts(parent, args, ctx: Context) {
+    // @ts-ignore
     const id = getUserId(ctx)
 
     const where = {
@@ -23,6 +24,7 @@ export const Query = {
   },
 
   me(parent, args, ctx: Context) {
+    // @ts-ignore
     const id = getUserId(ctx)
     return ctx.prisma.user({ id })
   },

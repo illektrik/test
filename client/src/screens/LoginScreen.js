@@ -22,11 +22,12 @@ const LoginScreen = (props) => {
       });
     } catch (e) {
       setError('Already taken');
+      console.log(e);
     }
     const {payload, error} = await res.data.login;
     if (payload) {
       await AsyncStorage.setItem('@ecommerce/token', payload.token);
-      await  props.navigation.navigate('Main');
+      await props.navigation.navigate('Main');
       setNewUser({
         email: '',
         password: ''

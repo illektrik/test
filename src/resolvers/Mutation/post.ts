@@ -2,6 +2,7 @@ import { getUserId, Context } from '../../utils'
 
 export const post = {
   async createDraft(parent, { title, content }, ctx: Context, info) {
+    // @ts-ignore
     const userId = getUserId(ctx)
     return ctx.prisma.createPost({
       title,
@@ -13,6 +14,7 @@ export const post = {
   },
 
   async publish(parent, { id }, ctx: Context, info) {
+    // @ts-ignore
     const userId = getUserId(ctx)
     const postExists = await ctx.prisma.$exists.post({
       id,
@@ -29,6 +31,7 @@ export const post = {
   },
 
   async deletePost(parent, { id }, ctx: Context, info) {
+    // @ts-ignore
     const userId = getUserId(ctx)
     const postExists = await ctx.prisma.$exists.post({
       id,

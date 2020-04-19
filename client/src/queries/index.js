@@ -22,7 +22,15 @@ export const LOGIN = gql`
 `;
 
 export const REFRESH_TOKEN = gql`
-  mutation($token: String!) {
-    refreshToken(token: $token)
+  mutation {
+    refreshToken
+  }
+`;
+
+export const CREATE_PRODUCT = gql`
+  mutation($name: String!, $price: Float!, $picture: Upload!) {
+    createProduct(name: $name, price: $price, picture: $picture){
+      id
+    }
   }
 `;

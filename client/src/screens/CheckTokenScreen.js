@@ -14,11 +14,7 @@ const CheckTokenScreen = (props) => {
       }
       let response;
       try {
-        response = await props.mutate({
-          variables: {
-            token
-          }
-        });
+        response = await props.mutate();
         console.log(response);
       } catch (err) {
         props.navigation.navigate('Signup');

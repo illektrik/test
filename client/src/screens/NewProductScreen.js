@@ -3,20 +3,46 @@ import {View, StyleSheet, TextInput, Button, Image} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
+import {graphql} from 'react-apollo';
+import {ReactNativeFile} from 'apollo-upload-client';
 
-const NewProductScreen = () => {
+import {CREATE_PRODUCT} from "../queries";
+
+const NewProductScreen = (props) => {
   const [newProduct, setNewProduct] = useState({
     name: '',
     price: '',
     pictureUrl: null
   });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const onChangeText = (key, value) => {
     setNewProduct({...newProduct, [key]: value})
   };
 
-  const submit = () => {};
   const {name, price, pictureUrl} = newProduct;
+
+  const submit = async () => {
+    if (isSubmitting) {
+      return
+    }
+    const picture = new ReactNativeFile({
+      uri: pictureUrl,
+      type: 'img/png',
+      name: 'name'
+    });
+    try {
+      await props.mutate({
+        variables: {
+          name, price: Number(price), picture
+        }
+      })
+    } catch (e) {
+      console.log(e);
+    }
+    setIsSubmitting(false);
+    await props.navigation.navigate('Main');
+  };
 
   const getPermissionAsync = async () => {
     if (Constants.platform.ios) {
@@ -88,4 +114,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default NewProductScreen;
+export default graphql(CREATE_PRODUCT)(NewProductScreen);
