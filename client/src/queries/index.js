@@ -34,3 +34,16 @@ export const CREATE_PRODUCT = gql`
     }
   }
 `;
+
+// Queries
+
+export const ALL_PRODUCTS = gql`
+  query {
+    products {
+      id,
+      name,
+      price,
+      pictureUrl
+    }
+  }
+`;

@@ -9,7 +9,7 @@ const MainScreen = ({navigation}) => {
   return (
     <View style={styles.center}>
       <View style={styles.products}>
-        <Text>Products</Text>
+        <Button title="Products" onPress={() => navigation.navigate('Products')}/>
         <Button title="Create product" onPress={() => navigation.navigate('NewProduct')}/>
       </View>
       <Button title="Go To Signup" onPress={goToAccount} />

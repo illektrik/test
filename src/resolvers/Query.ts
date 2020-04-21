@@ -1,6 +1,11 @@
 import { getUserId, Context } from '../utils'
+import {forwardTo} from 'prisma-binding'
+import {prisma} from "../generated/prisma-client";
 
 export const Query = {
+  products: async () => {
+    return await prisma.products()
+  },
   feed(parent, args, ctx: Context) {
     return ctx.prisma.posts({ where: { published: true } })
   },
