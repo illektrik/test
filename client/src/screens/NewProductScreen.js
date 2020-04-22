@@ -6,7 +6,7 @@ import * as Permissions from 'expo-permissions';
 import {graphql} from 'react-apollo';
 import {ReactNativeFile} from 'apollo-upload-client';
 
-import {CREATE_PRODUCT} from "../queries";
+import {CREATE_PRODUCT, ALL_PRODUCTS} from "../queries";
 
 const NewProductScreen = (props) => {
   const [newProduct, setNewProduct] = useState({
@@ -35,13 +35,16 @@ const NewProductScreen = (props) => {
       await props.mutate({
         variables: {
           name, price: Number(price), picture
-        }
+        },
+        refetchQueries: [
+          {query: ALL_PRODUCTS}
+        ]
       })
     } catch (e) {
       console.log(e);
     }
     setIsSubmitting(false);
-    await props.navigation.navigate('Main');
+    await props.navigation.navigate('Products');
   };
 
   const getPermissionAsync = async () => {

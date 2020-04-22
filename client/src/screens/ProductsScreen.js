@@ -10,7 +10,8 @@ const ProductsScreen = ({data: {products}, loading}) => {
   return (
     <View>
       <FlatList
-        data={products.map(p => ({...p, key: p.id}))}
+        keyExtractor={item => item.id}
+        data={products}
         renderItem={({item}) =>(
           <View style={styles.raw}>
             <Image style={styles.images} source={{ uri: `http://localhost:4000/${item.pictureUrl}`}}/>
