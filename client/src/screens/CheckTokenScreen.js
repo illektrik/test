@@ -1,8 +1,11 @@
 import React, {useEffect} from 'react';
 import {View, Text, StyleSheet, AsyncStorage} from 'react-native';
 import {graphql} from 'react-apollo';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 
 import {REFRESH_TOKEN} from "../queries";
+import {addUser} from "../reducers/user";
 
 const CheckTokenScreen = (props) => {
   useEffect( () => {
@@ -20,8 +23,9 @@ const CheckTokenScreen = (props) => {
         props.navigation.navigate('Signup');
         return
       }
-      const {refreshToken} = response.data;
+      const {refreshToken: {token: refreshToken, userId}} = response.data;
       await AsyncStorage.setItem('@ecommerce/token', refreshToken);
+      props.addUserAction({userId});
       props.navigation.navigate('Main');
     };
     action();
@@ -41,4 +45,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default graphql(REFRESH_TOKEN)(CheckTokenScreen);
+export default connect(null, dispatch => bindActionCreators({addUserAction: addUser}, dispatch))(graphql(REFRESH_TOKEN)(CheckTokenScreen));

@@ -23,14 +23,17 @@ export const LOGIN = gql`
 
 export const REFRESH_TOKEN = gql`
   mutation {
-    refreshToken
+    refreshToken {
+      token
+      userId
+    }
   }
 `;
 
 export const CREATE_PRODUCT = gql`
   mutation($name: String!, $price: Float!, $picture: Upload!) {
     createProduct(name: $name, price: $price, picture: $picture){
-      id
+      id,
     }
   }
 `;

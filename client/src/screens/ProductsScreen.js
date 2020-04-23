@@ -1,11 +1,13 @@
 import React from 'react';
 import {View, Text, StyleSheet, FlatList, Image} from 'react-native';
 import {graphql} from 'react-apollo';
+import {connect} from 'react-redux'
 
 import {ALL_PRODUCTS} from "../queries";
 
-const ProductsScreen = ({data: {products}, loading}) => {
+const ProductsScreen = ({userId, data: {products}, loading}) => {
   if (loading || !products) return <Text>Loading...</Text>;
+  // console.log(products);
 
   return (
     <View>
@@ -50,4 +52,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default graphql(ALL_PRODUCTS)(ProductsScreen);
+export default connect(state => ({userId: state.user.userId}))(graphql(ALL_PRODUCTS)(ProductsScreen));

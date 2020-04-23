@@ -9,8 +9,13 @@ type Query {
   products(where: ProductWhereInput, orderBy: ProductOrderByInput, skip: Int, after: String, before: String, first: Int, last: Int): [Product]!
 }
 
+type RefreshTokenPayload {
+  token: String!
+  userId: String!
+}
+
 type Mutation {
-  refreshToken: String!
+  refreshToken: RefreshTokenPayload
   signup(email: String!, password: String!, name: String!): AuthPayload!
   login(email: String!, password: String!): LoginResponse!
   createProduct(name: String!, price: Float!, picture: Upload!): Product!
@@ -51,4 +56,12 @@ type Post {
   title: String!
   content: String!
   author: User!
+}
+type Product {
+  id: ID!
+  name: String!
+  pictureUrl: String!
+  price: Float!
+  seller: User!,
+  userId: String
 }

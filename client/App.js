@@ -1,13 +1,15 @@
 import React, {useState} from 'react';
 import {AppLoading} from 'expo';
 import {ApolloProvider} from 'react-apollo';
-import {ApolloClient, InMemoryCache, HttpLink} from 'apollo-client-preset';
+import {ApolloClient, InMemoryCache} from 'apollo-client-preset';
 import { createUploadLink } from 'apollo-upload-client';
 import { setContext } from 'apollo-link-context';
 import {AsyncStorage} from 'react-native';
+import {Provider} from 'react-redux';
 
 import AppNavigation from "./src/navigation/AppNavigation";
 import {bootstrap} from "./src/bootstrap";
+import store from "./src/store";
 
 const authLink = setContext(async (_, { headers }) => {
   // get the authentication token from local storage if it exists
@@ -44,8 +46,10 @@ export default function App(props) {
     )
   }
   return (
-    <ApolloProvider client={client}>
-      <AppNavigation />
-    </ApolloProvider>
+    <Provider store={store}>
+      <ApolloProvider client={client}>
+        <AppNavigation />
+      </ApolloProvider>
+    </Provider>
   )
 }

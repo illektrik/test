@@ -25,6 +25,7 @@ export const product = {
     async createProduct(parent, { name, price, picture }, ctx: Context, info) {
         // @ts-ignore
         const userId = getUserId(ctx);
+        console.log(userId);
         return ctx.prisma.createProduct({
             name,
             price,

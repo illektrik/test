@@ -2,6 +2,7 @@ import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import {HeaderButtons, Item} from 'react-navigation-header-buttons';
+import {Button} from 'react-native';
 
 import MainScreen from "../screens/MainScreen";
 import AccountScreen from "../screens/AccountScreen";
@@ -29,9 +30,24 @@ const StackNavigation = (props) => (
         animationEnabled: false
       }}/>
     <Stack.Screen name="Account" component={AccountScreen}/>
-    <Stack.Screen name="Signup" component={SignupScreen}/>
+    <Stack.Screen
+      name="Signup"
+      component={SignupScreen}
+      options={
+        {
+          animationEnabled: false,
+          headerLeft: () => null
+        }}
+    />
     <Stack.Screen name="Login" component={LoginScreen}/>
-    <Stack.Screen name="CheckToken" component={CheckTokenScreen} options={{animationEnabled: false}}/>
+    <Stack.Screen
+      name="CheckToken"
+      component={CheckTokenScreen}
+      options={
+        {
+          animationEnabled: false,
+          headerLeft: () => null
+        }}/>
     <Stack.Screen name="NewProduct" component={NewProductScreen} />
     <Stack.Screen name="Products" component={ProductsScreen} />
   </Stack.Navigator>

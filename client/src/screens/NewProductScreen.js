@@ -32,7 +32,7 @@ const NewProductScreen = (props) => {
       name: 'name'
     });
     try {
-      await props.mutate({
+       const {data} = await props.mutate({
         variables: {
           name, price: Number(price), picture
         },
@@ -40,6 +40,7 @@ const NewProductScreen = (props) => {
           {query: ALL_PRODUCTS}
         ]
       })
+      console.log(data);
     } catch (e) {
       console.log(e);
     }
