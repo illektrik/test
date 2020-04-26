@@ -1,13 +1,25 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList, Image} from 'react-native';
+import {View, Text, StyleSheet, FlatList, Image, Button} from 'react-native';
 import {graphql} from 'react-apollo';
 import {connect} from 'react-redux'
+import { useMutation } from "@apollo/react-hooks";
 
-import {ALL_PRODUCTS} from "../queries";
+import {ALL_PRODUCTS, DELETE_PRODUCT} from "../queries";
 
 const ProductsScreen = ({userId, data: {products}, loading}) => {
   if (loading || !products) return <Text>Loading...</Text>;
-  // console.log(products);
+
+  const [deleteProduct] = useMutation(DELETE_PRODUCT, {
+    refetchQueries: [{query: ALL_PRODUCTS}]
+  });
+
+  const deletingProduct = async item => {
+    await deleteProduct({
+      variables: {
+        id: item.id
+      }
+    })
+  };
 
   return (
     <View>
@@ -20,6 +32,10 @@ const ProductsScreen = ({userId, data: {products}, loading}) => {
             <View style={styles.right}>
               <Text style={styles.name}>{item.name}</Text>
               <Text style={styles.price}>${item.price}</Text>
+              <View style={styles.editDelete}>
+                <Button title="Edit" onPress={() => {}}/>
+                <Button title="Delete" onPress={() => deletingProduct(item)}/>
+              </View>
             </View>
           </View>
         ) }
@@ -49,6 +65,9 @@ const styles = StyleSheet.create({
   },
   price: {
     fontSize: 30
+  },
+  editDelete: {
+    flexDirection: 'row'
   }
 });
 

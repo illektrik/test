@@ -3,7 +3,8 @@ import {forwardTo} from 'prisma-binding'
 import {prisma} from "../generated/prisma-client";
 
 export const Query = {
-  products: async () => {
+  products: async (parent, args, ctx: Context, info) => {
+    getUserId(ctx);
     return await prisma.products()
   },
   feed(parent, args, ctx: Context) {

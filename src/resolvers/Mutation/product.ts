@@ -1,6 +1,7 @@
 import { getUserId, Context } from '../../utils';
 import { createWriteStream } from 'fs';
 import * as shortid from 'shortid'
+import {prisma} from "../../generated/prisma-client";
 
 const storeUpload = async ({ stream, filename }): Promise<any> => {
     const id = shortid.generate();
@@ -22,10 +23,27 @@ const processUpload = async upload => {
 };
 
 export const product = {
+    deleteProduct: async (parent, args, ctx: Context, info) => {
+        return ctx.prisma.deleteProduct({id: args.where.id})
+    },
+    async updateProduct(parent, { name, price, picture }, ctx: Context, info) {
+        const userId = getUserId(ctx);
+        let pictureUrl = null;
+        if (picture) {
+            pictureUrl = await processUpload(picture);
+        };
+        return ctx.prisma.updateProduct({
+            name,
+            price,
+            pictureUrl,
+            where: {
+                id: userId
+            }
+        })
+    },
     async createProduct(parent, { name, price, picture }, ctx: Context, info) {
         // @ts-ignore
         const userId = getUserId(ctx);
-        console.log(userId);
         return ctx.prisma.createProduct({
             name,
             price,

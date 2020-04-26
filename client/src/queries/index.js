@@ -38,6 +38,14 @@ export const CREATE_PRODUCT = gql`
   }
 `;
 
+export const DELETE_PRODUCT = gql`
+  mutation($id: ID!) {
+    deleteProduct(where: {id: $id}) {
+      id
+    }
+  }
+`;
+
 // Queries
 
 export const ALL_PRODUCTS = gql`
@@ -46,7 +54,7 @@ export const ALL_PRODUCTS = gql`
       id,
       name,
       price,
-      pictureUrl
+      pictureUrl,
     }
   }
 `;
