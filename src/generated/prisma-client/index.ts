@@ -120,7 +120,10 @@ export interface Prisma {
   deletePost: (where: PostWhereUniqueInput) => PostPromise;
   deleteManyPosts: (where?: PostWhereInput) => BatchPayloadPromise;
   createProduct: (data: ProductCreateInput) => ProductPromise;
-  updateProduct: (args: { price: any; pictureUrl: any; name: any; where: { id: string } }) => ProductPromise;
+  updateProduct: (args: {
+    data: ProductUpdateInput;
+    where: ProductWhereUniqueInput;
+  }) => ProductPromise;
   updateManyProducts: (args: {
     data: ProductUpdateManyMutationInput;
     where?: ProductWhereInput;

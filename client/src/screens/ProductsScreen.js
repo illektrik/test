@@ -6,7 +6,7 @@ import { useMutation } from "@apollo/react-hooks";
 
 import {ALL_PRODUCTS, DELETE_PRODUCT} from "../queries";
 
-const ProductsScreen = ({userId, data: {products}, loading}) => {
+const ProductsScreen = ({userId, data: {products}, loading, navigation}) => {
   if (loading || !products) return <Text>Loading...</Text>;
 
   const [deleteProduct] = useMutation(DELETE_PRODUCT, {
@@ -33,7 +33,9 @@ const ProductsScreen = ({userId, data: {products}, loading}) => {
               <Text style={styles.name}>{item.name}</Text>
               <Text style={styles.price}>${item.price}</Text>
               <View style={styles.editDelete}>
-                <Button title="Edit" onPress={() => {}}/>
+                <Button title="Edit" onPress={() => {
+                  navigation.navigate('Edit product', {item})
+                } }/>
                 <Button title="Delete" onPress={() => deletingProduct(item)}/>
               </View>
             </View>

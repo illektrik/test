@@ -46,6 +46,14 @@ export const DELETE_PRODUCT = gql`
   }
 `;
 
+export const UPDATE_PRODUCT = gql`
+  mutation($id: ID!, $name: String!, $price: Float!, $picture: Upload!) {
+    updateProduct(id: $id, name: $name, price: $price, picture: $picture) {
+      id
+    }
+  }
+`;
+
 // Queries
 
 export const ALL_PRODUCTS = gql`

@@ -13,6 +13,7 @@ import NewProductScreen from "../screens/NewProductScreen";
 import ProductsScreen from "../screens/ProductsScreen";
 import AppHeaderIcon from "../components/AppHeaderIcon";
 import {createDrawerNavigator} from "@react-navigation/drawer";
+import EditProductScreen from "../screens/EditProductScreen";
 
 const Stack = createStackNavigator();
 const StackNavigation = (props) => (
@@ -50,6 +51,7 @@ const StackNavigation = (props) => (
         }}/>
     <Stack.Screen name="NewProduct" component={NewProductScreen} />
     <Stack.Screen name="Products" component={ProductsScreen} />
+    <Stack.Screen name="Edit product" component={EditProductScreen}/>
   </Stack.Navigator>
 );
 

@@ -37,8 +37,7 @@ const client = new ApolloClient({
   },
 });
 
-export default function App(props) {
-  console.log(props.navigation);
+export default function App() {
   const [isReady, setIsReady] = useState(false);
   if (!isReady) {
     return (

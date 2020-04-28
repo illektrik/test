@@ -26,18 +26,18 @@ export const product = {
     deleteProduct: async (parent, args, ctx: Context, info) => {
         return ctx.prisma.deleteProduct({id: args.where.id})
     },
-    async updateProduct(parent, { name, price, picture }, ctx: Context, info) {
-        const userId = getUserId(ctx);
+    async updateProduct(parent, { name, price, picture, id }, ctx: Context, info) {
         let pictureUrl = null;
         if (picture) {
             pictureUrl = await processUpload(picture);
         };
         return ctx.prisma.updateProduct({
-            name,
-            price,
-            pictureUrl,
-            where: {
-                id: userId
+            data: {
+                name,
+                price,
+                pictureUrl: await processUpload(picture),
+            }, where: {
+                id
             }
         })
     },
