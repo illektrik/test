@@ -59,3 +59,14 @@ type Post {
   content: String!
   author: User!
 }
+
+enum ProductOrderByInput {
+  id_ASC
+  id_DESC
+  name_ASC
+  name_DESC
+  pictureUrl_ASC
+  pictureUrl_DESC
+  price_ASC
+  price_DESC
+}

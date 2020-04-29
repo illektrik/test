@@ -1,12 +1,12 @@
 import React from 'react';
-import {View, Text, StyleSheet, FlatList, Image, Button} from 'react-native';
+import {View, Text, StyleSheet, FlatList, Image, Button, TextInput} from 'react-native';
 import {graphql} from 'react-apollo';
 import {connect} from 'react-redux'
 import { useMutation } from "@apollo/react-hooks";
 
 import {ALL_PRODUCTS, DELETE_PRODUCT} from "../queries";
 
-const ProductsScreen = ({userId, data: {products}, loading, navigation}) => {
+const ProductsScreen = ({userId, data: {products, refetch, variables}, loading, navigation}) => {
   if (loading || !products) return <Text>Loading...</Text>;
 
   const [deleteProduct] = useMutation(DELETE_PRODUCT, {
@@ -23,6 +23,20 @@ const ProductsScreen = ({userId, data: {products}, loading, navigation}) => {
 
   return (
     <View>
+      <View>
+        <TextInput style={styles.searchBar} placeholder="Search" onPress={() => {}}/>
+      </View>
+      <View style={styles.sort}>
+        <Button style={styles.sortBtn} title="Name"/>
+        <Button
+          style={styles.sortBtn}
+          title="Price"
+          onPress={() => {
+            refetch({orderBy: 'price_DESC'});
+            console.log(variables)
+          }}
+        />
+      </View>
       <FlatList
         keyExtractor={item => item.id}
         data={products}
@@ -70,6 +84,17 @@ const styles = StyleSheet.create({
   },
   editDelete: {
     flexDirection: 'row'
+  },
+  sort: {
+    flexDirection: 'row',
+    justifyContent: 'center'
+  },
+  sortBtn: {
+    flex: 1
+  },
+  searchBar: {
+    margin: 10,
+    borderBottomWidth: 1,
   }
 });
 

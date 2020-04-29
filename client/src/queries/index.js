@@ -57,8 +57,8 @@ export const UPDATE_PRODUCT = gql`
 // Queries
 
 export const ALL_PRODUCTS = gql`
-  query {
-    products {
+  query($orderBy: ProductOrderByInput) {
+    products(orderBy: $orderBy) {
       id,
       name,
       price,
