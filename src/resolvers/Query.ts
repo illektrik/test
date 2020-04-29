@@ -3,10 +3,11 @@ import {forwardTo} from 'prisma-binding'
 import {prisma} from "../generated/prisma-client";
 
 export const Query = {
-  products: async (parent, {orderBy}, ctx: Context, info) => {
+  products: async (parent, {orderBy, where}, ctx: Context, info) => {
     getUserId(ctx);
     return await prisma.products({
-      orderBy
+      orderBy,
+      where
     })
   },
   feed(parent, args, ctx: Context) {

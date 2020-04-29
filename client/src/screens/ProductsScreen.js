@@ -1,5 +1,5 @@
-import React from 'react';
-import {View, Text, StyleSheet, FlatList, Image, Button, TextInput} from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet, FlatList, Image, Button, TextInput, ActivityIndicator} from 'react-native';
 import {graphql} from 'react-apollo';
 import {connect} from 'react-redux'
 import { useMutation } from "@apollo/react-hooks";
@@ -8,6 +8,8 @@ import {ALL_PRODUCTS, DELETE_PRODUCT} from "../queries";
 
 const ProductsScreen = ({userId, data: {products, refetch, variables}, loading, navigation}) => {
   if (loading || !products) return <Text>Loading...</Text>;
+
+  const [query, setQuery] = useState('');
 
   const [deleteProduct] = useMutation(DELETE_PRODUCT, {
     refetchQueries: [{query: ALL_PRODUCTS}]
@@ -24,22 +26,41 @@ const ProductsScreen = ({userId, data: {products, refetch, variables}, loading, 
   return (
     <View>
       <View>
-        <TextInput style={styles.searchBar} placeholder="Search" onPress={() => {}}/>
+        <TextInput
+          style={styles.searchBar}
+          placeholder="Search"
+          value={query}
+          onChangeText={(text) => {
+            setQuery(text);
+            refetch({where: {
+              name_contains: text
+            }})
+          } }
+        />
       </View>
       <View style={styles.sort}>
-        <Button style={styles.sortBtn} title="Name"/>
+        <Button
+          style={styles.sortBtn}
+          title="Name"
+          onPress={() => {
+            refetch({orderBy: variables.orderBy === 'name_DESC' ? 'name_ASC' : 'name_DESC'});
+          }}
+        />
         <Button
           style={styles.sortBtn}
           title="Price"
           onPress={() => {
-            refetch({orderBy: 'price_DESC'});
-            console.log(variables)
+            refetch({orderBy: variables.orderBy === 'price_DESC' ? 'price_ASC' : 'price_DESC'});
           }}
         />
       </View>
       <FlatList
         keyExtractor={item => item.id}
         data={products}
+        style={styles.flatList}
+        onEndReached={() => console.log('done!!')}
+        onEndReachedThreshold={0}
+        ListFooterComponent={() => <ActivityIndicator size="small" color="black" />}
         renderItem={({item}) =>(
           <View style={styles.raw}>
             <Image style={styles.images} source={{ uri: `http://localhost:4000/${item.pictureUrl}`}}/>
@@ -95,6 +116,9 @@ const styles = StyleSheet.create({
   searchBar: {
     margin: 10,
     borderBottomWidth: 1,
+  },
+  flatList: {
+    marginBottom: 100
   }
 });
 
