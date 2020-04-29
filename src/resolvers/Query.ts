@@ -10,6 +10,13 @@ export const Query = {
       where
     })
   },
+  productsConnection: async (parent, {orderBy, where}, ctx: Context, info) => {
+    getUserId(ctx);
+    return await prisma.productsConnection({
+      orderBy,
+      where
+    })
+  },
   feed(parent, args, ctx: Context) {
     return ctx.prisma.posts({ where: { published: true } })
   },

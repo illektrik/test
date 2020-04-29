@@ -8,7 +8,7 @@ import {ReactNativeFile} from 'apollo-upload-client';
 
 import {UPDATE_PRODUCT, ALL_PRODUCTS} from "../queries";
 const EditProductScreen = (props) => {
-  const item = (props.route.params.item);
+  const item = (props.route.params.item.node);
   const [newProduct, setNewProduct] = useState({
     name: item.name,
     price: String(item.price),

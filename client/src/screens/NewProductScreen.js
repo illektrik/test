@@ -96,7 +96,7 @@ const NewProductScreen = (props) => {
           autoCapitalize="none"
         />
         <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Button title="Pick an image from camera roll" onPress={_pickImage} />
+          <Button title="Pick an image" onPress={_pickImage} />
           {pictureUrl && <Image source={{ uri: pictureUrl }} style={{ width: 200, height: 200 }} />}
         </View>
         <Button title="Create product" onPress={submit}/>

@@ -58,11 +58,19 @@ export const UPDATE_PRODUCT = gql`
 
 export const ALL_PRODUCTS = gql`
   query($orderBy: ProductOrderByInput, $where: ProductWhereInput) {
-    products(orderBy: $orderBy, where: $where) {
-      id,
-      name,
-      price,
-      pictureUrl,
+    productsConnection(orderBy: $orderBy, where: $where) {
+      pageInfo {
+        hasNextPage,
+        hasPreviousPage
+      }
+      edges {
+        node {
+          id
+          price
+          pictureUrl
+          name
+        }
+      }
     }
   }
 `;

@@ -6,8 +6,8 @@ import { useMutation } from "@apollo/react-hooks";
 
 import {ALL_PRODUCTS, DELETE_PRODUCT} from "../queries";
 
-const ProductsScreen = ({userId, data: {products, refetch, variables}, loading, navigation}) => {
-  if (loading || !products) return <Text>Loading...</Text>;
+const ProductsScreen = ({userId, data: {productsConnection, refetch, variables}, loading, navigation}) => {
+  if (loading || !productsConnection) return <Text>Loading...</Text>;
 
   const [query, setQuery] = useState('');
 
@@ -22,6 +22,8 @@ const ProductsScreen = ({userId, data: {products, refetch, variables}, loading, 
       }
     })
   };
+
+  console.log(productsConnection);
 
   return (
     <View>
@@ -55,23 +57,23 @@ const ProductsScreen = ({userId, data: {products, refetch, variables}, loading, 
         />
       </View>
       <FlatList
-        keyExtractor={item => item.id}
-        data={products}
+        keyExtractor={item => item.node.id}
+        data={productsConnection.edges}
         style={styles.flatList}
         onEndReached={() => console.log('done!!')}
         onEndReachedThreshold={0}
         ListFooterComponent={() => <ActivityIndicator size="small" color="black" />}
         renderItem={({item}) =>(
           <View style={styles.raw}>
-            <Image style={styles.images} source={{ uri: `http://localhost:4000/${item.pictureUrl}`}}/>
+            <Image style={styles.images} source={{ uri: `http://localhost:4000/${item.node.pictureUrl}`}}/>
             <View style={styles.right}>
-              <Text style={styles.name}>{item.name}</Text>
-              <Text style={styles.price}>${item.price}</Text>
+              <Text style={styles.name}>{item.node.name}</Text>
+              <Text style={styles.price}>${item.node.price}</Text>
               <View style={styles.editDelete}>
                 <Button title="Edit" onPress={() => {
                   navigation.navigate('Edit product', {item})
                 } }/>
-                <Button title="Delete" onPress={() => deletingProduct(item)}/>
+                <Button title="Delete" onPress={() => deletingProduct(item.node)}/>
               </View>
             </View>
           </View>
