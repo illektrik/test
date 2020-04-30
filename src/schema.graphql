@@ -70,3 +70,11 @@ enum ProductOrderByInput {
   price_ASC
   price_DESC
 }
+
+type Product {
+  id: ID!
+  name: String!
+  pictureUrl: String!
+  price: Float!
+  seller: User!
+}

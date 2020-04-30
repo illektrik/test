@@ -57,11 +57,12 @@ export const UPDATE_PRODUCT = gql`
 // Queries
 
 export const ALL_PRODUCTS = gql`
-  query($orderBy: ProductOrderByInput, $where: ProductWhereInput) {
-    productsConnection(orderBy: $orderBy, where: $where) {
+  query($after: String, $orderBy: ProductOrderByInput, $where: ProductWhereInput) {
+    productsConnection(orderBy: $orderBy, where: $where, first: 6, after: $after) {
       pageInfo {
         hasNextPage,
-        hasPreviousPage
+        hasPreviousPage,
+        endCursor
       }
       edges {
         node {

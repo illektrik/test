@@ -7,14 +7,15 @@ export const Query = {
     getUserId(ctx);
     return await prisma.products({
       orderBy,
-      where
+      where,
     })
   },
-  productsConnection: async (parent, {orderBy, where}, ctx: Context, info) => {
+  productsConnection: async (parent, {orderBy, where, first}, ctx: Context, info) => {
     getUserId(ctx);
     return await prisma.productsConnection({
       orderBy,
-      where
+      where,
+      first
     })
   },
   feed(parent, args, ctx: Context) {

@@ -6,7 +6,7 @@ import { useMutation } from "@apollo/react-hooks";
 
 import {ALL_PRODUCTS, DELETE_PRODUCT} from "../queries";
 
-const ProductsScreen = ({userId, data: {productsConnection, refetch, variables}, loading, navigation}) => {
+const ProductsScreen = ({userId, data: {productsConnection, refetch, variables, fetchMore}, loading, navigation, calledOnce}) => {
   if (loading || !productsConnection) return <Text>Loading...</Text>;
 
   const [query, setQuery] = useState('');
@@ -23,7 +23,7 @@ const ProductsScreen = ({userId, data: {productsConnection, refetch, variables},
     })
   };
 
-  console.log(productsConnection);
+  console.log(productsConnection.pageInfo);
 
   return (
     <View>
@@ -60,9 +60,36 @@ const ProductsScreen = ({userId, data: {productsConnection, refetch, variables},
         keyExtractor={item => item.node.id}
         data={productsConnection.edges}
         style={styles.flatList}
-        onEndReached={() => console.log('done!!')}
+        onEndReached={() => {
+          if (calledOnce && productsConnection.pageInfo.hasNextPage) {
+            fetchMore({
+              variables: {
+                after: productsConnection.pageInfo.endCursor
+              },
+              updateQuery: (previousResult, { fetchMoreResult }) => {
+                if (!fetchMoreResult) {
+                  return previousResult;
+                }
+                return {
+                  productsConnection: {
+                    __typename: 'ProductConnection',
+                    pageInfo: fetchMoreResult.productsConnection.pageInfo,
+                    edges: [
+                      ...previousResult.productsConnection.edges,
+                      ...fetchMoreResult.productsConnection.edges,
+                    ],
+                  },
+                };
+              },
+            })
+          } else {
+            calledOnce = true
+          }
+        } }
         onEndReachedThreshold={0}
-        ListFooterComponent={() => <ActivityIndicator size="small" color="black" />}
+        ListFooterComponent={() => (
+         <ActivityIndicator size="small" color="black" />
+        )}
         renderItem={({item}) =>(
           <View style={styles.raw}>
             <Image style={styles.images} source={{ uri: `http://localhost:4000/${item.node.pictureUrl}`}}/>
@@ -124,4 +151,6 @@ const styles = StyleSheet.create({
   }
 });
 
-export default connect(state => ({userId: state.user.userId}))(graphql(ALL_PRODUCTS)(ProductsScreen));
+export default connect(state => (
+  {userId: state.user.userId}))(graphql(ALL_PRODUCTS)(ProductsScreen)
+);
