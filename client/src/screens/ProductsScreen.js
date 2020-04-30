@@ -6,10 +6,11 @@ import { useMutation } from "@apollo/react-hooks";
 
 import {ALL_PRODUCTS, DELETE_PRODUCT} from "../queries";
 
-const ProductsScreen = ({userId, data: {productsConnection, refetch, variables, fetchMore}, loading, navigation, calledOnce}) => {
+const ProductsScreen = ({userId, data: {productsConnection, refetch, variables, fetchMore, loading}, navigation}) => {
   if (loading || !productsConnection) return <Text>Loading...</Text>;
 
   const [query, setQuery] = useState('');
+  const [startPagination, setStartPagination] = useState(false);
 
   const [deleteProduct] = useMutation(DELETE_PRODUCT, {
     refetchQueries: [{query: ALL_PRODUCTS}]
@@ -22,8 +23,6 @@ const ProductsScreen = ({userId, data: {productsConnection, refetch, variables, 
       }
     })
   };
-
-  console.log(productsConnection.pageInfo);
 
   return (
     <View>
@@ -45,14 +44,14 @@ const ProductsScreen = ({userId, data: {productsConnection, refetch, variables, 
           style={styles.sortBtn}
           title="Name"
           onPress={() => {
-            refetch({orderBy: variables.orderBy === 'name_DESC' ? 'name_ASC' : 'name_DESC'});
+            !loading && refetch({orderBy: variables.orderBy === 'name_DESC' ? 'name_ASC' : 'name_DESC', after: null});
           }}
         />
         <Button
           style={styles.sortBtn}
           title="Price"
           onPress={() => {
-            refetch({orderBy: variables.orderBy === 'price_DESC' ? 'price_ASC' : 'price_DESC'});
+            !loading && refetch({orderBy: variables.orderBy === 'price_DESC' ? 'price_ASC' : 'price_DESC', after: null});
           }}
         />
       </View>
@@ -60,8 +59,9 @@ const ProductsScreen = ({userId, data: {productsConnection, refetch, variables, 
         keyExtractor={item => item.node.id}
         data={productsConnection.edges}
         style={styles.flatList}
+        onMomentumScrollBegin={() => setStartPagination(true)}
         onEndReached={() => {
-          if (calledOnce && productsConnection.pageInfo.hasNextPage) {
+          if (!loading && productsConnection.pageInfo.hasNextPage && startPagination) {
             fetchMore({
               variables: {
                 after: productsConnection.pageInfo.endCursor
@@ -81,15 +81,15 @@ const ProductsScreen = ({userId, data: {productsConnection, refetch, variables, 
                   },
                 };
               },
-            })
-          } else {
-            calledOnce = true
+            });
           }
+          setStartPagination(false);
         } }
         onEndReachedThreshold={0}
-        ListFooterComponent={() => (
-         <ActivityIndicator size="small" color="black" />
-        )}
+        ListFooterComponent={() => {
+          if (productsConnection.pageInfo.hasNextPage) return <ActivityIndicator size="small" color="black"/>
+          return null
+        }}
         renderItem={({item}) =>(
           <View style={styles.raw}>
             <Image style={styles.images} source={{ uri: `http://localhost:4000/${item.node.pictureUrl}`}}/>

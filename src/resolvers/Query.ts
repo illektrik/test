@@ -10,12 +10,13 @@ export const Query = {
       where,
     })
   },
-  productsConnection: async (parent, {orderBy, where, first}, ctx: Context, info) => {
+  productsConnection: async (parent, {orderBy, where, first, after}, ctx: Context, info) => {
     getUserId(ctx);
     return await prisma.productsConnection({
       orderBy,
       where,
-      first
+      first,
+      after
     })
   },
   feed(parent, args, ctx: Context) {
